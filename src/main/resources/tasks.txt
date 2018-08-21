@@ -1,0 +1,19 @@
+1 - getting the length of str
+2 - Compare 2 strings with ignore case
+3 - Create a new string using the constructor and put it into the literal pool
+4, 5 - To combine 2 strings in which the new object will be created and not will be created.
+6 - To get from a string an array of characters
+7 - To from a string to a byte array
+8 - Cast the string to upper case
+9 - the first position of the character "a"
+10 - the last position of the character "a"
+11 contains-if the string word "Sun"
+12 - ends-if the string "Oracle"
+13 - starts-if the string "Java"
+14 - Replace all characters "a" to "o"
+15 - To get a substring from 44 character 90 character
+16 - split str
+17 - creating String Builder from str
+18 - Add to the end of the string the StringBuilder character
+19 Delete to ', разработанный компанией Sun Microsystems в последующем приобретённой компанией Oracle' from StringBuilder
+20 reverse str
