@@ -30,6 +30,26 @@ public class StringPractik {
     }
 
     /**
+     * To combine 2 strings in which the new object will be created
+     * @param str1 first string
+     * @param str2 second string
+     * @return combine string
+     */
+    public String combineString(String str1, String str2) {
+        return str1 + str2;
+    }
+
+    /**
+     * To combine 2 strings in which not will be created.
+     * @param str1 first stringBuilder
+     * @param str2 second stringBuilder
+     * @return combine stringBuilder
+     */
+    public StringBuilder combineStringBuilder(StringBuilder str1, StringBuilder str2) {
+        return str1.append(str2);
+    }
+
+    /**
      * return from a string an array of characters
      * @param str string
      * @return array of characters

@@ -46,6 +46,30 @@ public class StringPractikTest {
     }
 
     @Test
+    public void combineStringTest() {
+        final String str1 = "Hello";
+        final String str2 = " World";
+
+        String result = stringPractik.combineString(str1, str2);
+
+        assertTrue(result instanceof String);
+
+        System.out.println("test for Task4 done.");
+    }
+
+    @Test
+    public void combineStringBuilderTest() {
+        final StringBuilder str1 = new StringBuilder("Hello");
+        final StringBuilder str2 = new StringBuilder(" World");
+
+        StringBuilder result = stringPractik.combineStringBuilder(str1, str2);
+
+        assertTrue(result instanceof StringBuilder);
+
+        System.out.println("test for Task5 done.");
+    }
+
+    @Test
     public void getCharsTest() {
         final String str = "Hello";
         final char[] charArray = {'H', 'e', 'l', 'l', 'o'};
@@ -78,7 +102,7 @@ public class StringPractikTest {
 
         assertEquals(result, actualString);
 
-        System.out.println("test for Task9 done.");
+        System.out.println("test for Task8 done.");
     }
 
     @Test
