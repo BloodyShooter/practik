@@ -12,4 +12,29 @@ public class Test10Java {
 
         list.forEach(System.out::println);
     }
+
+    static class A {
+
+    }
+
+    static class B extends A {
+
+    }
+
+    static class C extends B {
+
+    }
+
+    @Test
+    public void test() {
+        C c = new C();
+        B b = new B();
+        A a = new A();
+    }
+
+    public static void main(String[] args) {
+        C c = new C();
+        B b = new B();
+        A a = new A();
+    }
 }
