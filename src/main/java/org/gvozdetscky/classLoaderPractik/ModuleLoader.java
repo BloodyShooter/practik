@@ -5,8 +5,11 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
+/**
+ * Этот класс был написан по примеру
+ * @see <a href="http://samolisov.blogspot.com/2008/01/java.html">Пишем свой загручик java-классов</a>
+ */
 public class ModuleLoader extends ClassLoader {
 
     /**
@@ -19,47 +22,31 @@ public class ModuleLoader extends ClassLoader {
      */
     private String jarFilePath;
 
+    /**
+     * Пакеты
+     */
     private String packageName;
 
+    /**
+     * Собственно конструктор
+     * @param jarFilePath путь к jar файлу
+     * @param packageName корневые пакеты
+     */
     public ModuleLoader(String jarFilePath, String packageName) {
         this.jarFilePath = jarFilePath;
         this.packageName = packageName;
 
-        anotherCacheClasses();
     }
 
-    private void cacheClasses() {
+    /**
+     * Загружает класс в кеш по имени класса
+     * @param name имя класса без указания пакета
+     * @return если загрузка прошла успешно, то вернет класс. Иначе null
+     */
+    private Class<?> loadClassInCache(String name) {
         try {
             JarFile jarFile = new JarFile(jarFilePath);
-            Enumeration<JarEntry> entries = jarFile.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry jarEntry = entries.nextElement();
-                System.out.println(jarEntry.getName());
-                if (match(normalize(jarEntry.getName()), packageName)) {
-                    byte[] classData = loadClassData(jarFile, jarEntry);
-                    if (classData != null) {
-                        Class<?> clazz = defineClass(
-                                stripClassName(normalize(jarEntry.getName())),
-                                classData, 0, classData.length
-                        );
-                        if (!clazz.isInterface()) {
-                            cache.put(clazz.getName(), clazz);
-                            System.out.println("== class " + clazz.getName() + " loaded in cache");
-                        }
-
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void anotherCacheClasses() {
-        try {
-            JarFile jarFile = new JarFile(jarFilePath);
-            JarEntry entry = jarFile.getJarEntry("org/gvozdetscky/classLoaderPractik/ModulePrinter.class");
+            JarEntry entry = jarFile.getJarEntry(normalizeFS(packageName) + "/" + name + ".class");
             if (match(normalize(entry.getName()), packageName)) {
                 byte[] classData = loadClassData(jarFile, entry);
                 if (classData != null) {
@@ -75,8 +62,18 @@ public class ModuleLoader extends ClassLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return cache.get(packageName + "." + name);
     }
 
+    /**
+     * Переопределенный метод для получения класса
+     * Проверяет кэш, еслип не найден идет спрашивать загрузчика чином повыше,
+     * В случае провала сам подргружает класс
+     * @param name имя класса
+     * @return возврашает загружанный класс
+     * @throws ClassNotFoundException выбрасывается если класс не найден
+     */
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         Class<?> result = cache.get(name);
@@ -86,7 +83,13 @@ public class ModuleLoader extends ClassLoader {
         }
 
         if (result == null) {
-            result = super.findSystemClass(name);
+            try {
+                result = super.findSystemClass(name);
+            } catch (ClassNotFoundException e) {
+                result = loadClassInCache(name);
+                System.out.println(result);
+                if (result == null) throw new ClassNotFoundException("класс не был найден");
+            }
         }
 
         System.out.println("== loadClass(" + name + ")");
@@ -94,23 +97,9 @@ public class ModuleLoader extends ClassLoader {
         return result;
     }
 
-    public boolean deleteClassInCache(String name) {
-        Class<?> removeClass = cache.remove(name);
-
-        if (removeClass == null) {
-            removeClass = cache.get(packageName + "." + name);
-        }
-
-        System.out.println("== remove " + removeClass.getName());
-
-        return removeClass == null;
-
-
-    }
-
     /**
      * Получаем каноническое имя класса
-     *
+     * (убираем .class в конце)
      * @param className
      * @return
      */
@@ -125,9 +114,19 @@ public class ModuleLoader extends ClassLoader {
      * @param className
      * @return
      */
-
     private String normalize(String className) {
         return className.replace('/', '.');
+    }
+
+    /**
+     * Преобразуем имя класса в имя в файловой системе
+     * (заменяем точки на слэши)
+     *
+     * @param className
+     * @return
+     */
+    private String normalizeFS(String className) {
+        return className.replace('.', '/');
     }
 
     /**
@@ -142,6 +141,13 @@ public class ModuleLoader extends ClassLoader {
         return className.startsWith(packageName) && className.endsWith(".class");
     }
 
+    /**
+     * Загружаем класс из jar архива по ссылки на класс
+     * @param jarFile путь к архиву
+     * @param jarEntry путь к классу внутри архива
+     * @return массив байтов, которые представляют класс
+     * @throws IOException произошли ошибки чтения
+     */
     private byte[] loadClassData(JarFile jarFile, JarEntry jarEntry) throws IOException {
         long size = jarEntry.getSize();
         if (size == -1 || size == 0) {

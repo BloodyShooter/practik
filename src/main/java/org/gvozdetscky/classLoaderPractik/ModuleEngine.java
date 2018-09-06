@@ -1,8 +1,5 @@
 package org.gvozdetscky.classLoaderPractik;
 
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-
 public class ModuleEngine {
 
     private static final String jarFilePath = "C:\\Users\\Егорка\\IdeaProjects\\test\\out\\artifacts\\test_jar\\test.jar";
@@ -37,11 +34,7 @@ public class ModuleEngine {
             execute.run();
             execute.unload();
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
