@@ -1,27 +1,36 @@
+package org.gvozdetscky.classLoaderPractik;
+
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
 public class ModuleEngine {
 
-    public static void main(String[] args) throws MalformedURLException {
-        String modulePath = args[0];
+    private static final String jarFilePath = "C:\\Users\\Егорка\\IdeaProjects\\test\\out\\artifacts\\test_jar\\test.jar";
+    private static final String packegeName = "org.gvozdetscky.classLoaderPractik";
+
+    public static void main(String[] args) {
+
         /*
           Создаем загрузчик модулей.
          */
-        ModuleLoader loader = new ModuleLoader(ClassLoader.getSystemClassLoader(), modulePath);
-        //URLClassLoader loader = new URLClassLoader(new URL[]{new URL( "file:C:\\Users\\Егорка\\IdeaProjects\\test\\out\\production\\test\\classLoaderPractik")});
+        ModuleLoader loader = new ModuleLoader(
+                jarFilePath,
+                packegeName
+        );
 
         /*
          * Загружаем и исполняем каждый модуль.
          */
         try {
             String moduleName = "ModulePrinter";
-            System.out.println(moduleName);
             Class clazz = loader.loadClass(moduleName);
             Object newInst = clazz.newInstance();
+
             if (!(newInst instanceof Module)) {
                 System.out.println("Не скастовать");
                 return;
             }
+
             Module execute = (Module) newInst;
 
             execute.load();

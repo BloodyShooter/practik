@@ -1,3 +1,5 @@
+package org.gvozdetscky.classLoaderPractik;
+
 public interface Module {
 
     public static final int EXIT_SUCCESS = 0;
