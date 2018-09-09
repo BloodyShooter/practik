@@ -87,7 +87,6 @@ public class ModuleLoader extends ClassLoader {
                 result = super.findSystemClass(name);
             } catch (ClassNotFoundException e) {
                 result = loadClassInCache(name);
-                System.out.println(result);
                 if (result == null) throw new ClassNotFoundException("класс не был найден");
             }
         }
