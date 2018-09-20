@@ -7,7 +7,7 @@ public class ExceptionTest {
     @Test
     public void testException() {
         try {
-            throw new MyException("Моя ошибка");
+            throw new MyException("");
         } catch (MyException e) {
             e.printStackTrace();
         }
