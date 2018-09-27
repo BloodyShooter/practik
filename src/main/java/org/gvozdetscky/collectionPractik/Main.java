@@ -16,6 +16,7 @@ public class Main {
 
         tasks.forEach(System.out::println);
 
-        tasks.forEach(task -> task.done());
+        //tasks.forEach(task -> task.done());
+        tasks.forEach(Task::done);
     }
 }
