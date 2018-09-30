@@ -1,8 +1,11 @@
 package org.gvozdetscky.ioPractik;
 
+import java.io.File;
+
 public class Main {
     public static void main(String[] args) {
         IOClass io = new IOClass("D:\\test.my", 0);
+        ZipClass zip = new ZipClass();
 
         SerialTest serialTest = new SerialTest();
 
@@ -12,7 +15,7 @@ public class Main {
         System.out.println("====1obj====");
         System.out.println(serialTest);
 
-        io.writeObject(serialTest);
+        //io.writeObject(serialTest);
 
         serialTest.age = 0;
         serialTest.name = "Секонд нэйм";
@@ -24,5 +27,9 @@ public class Main {
 
         System.out.println("====loadobj====");
         System.out.println(serialTest);
+
+        System.out.println("===dozip===");
+        //zip.doZip("D:\\myzip.zip", "D:\\test.my");
+        zip.unZip("D:\\myzip.zip");
     }
 }
