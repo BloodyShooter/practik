@@ -20,9 +20,6 @@ public class ZipClass {
             zos.write(buffer);
 
             zos.closeEntry();
-
-            //Удаляем файл
-            fileObj.deleteOnExit();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,7 +35,6 @@ public class ZipClass {
             }
 
             String name = entry.getName();
-            long size = entry.getSize();
 
             System.out.println(getParentCatalog(nameZip) + name);
 

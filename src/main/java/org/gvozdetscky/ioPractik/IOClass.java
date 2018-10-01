@@ -7,15 +7,7 @@ import java.util.zip.ZipOutputStream;
 
 public class IOClass {
 
-    String filePath;
-    int lvlCompression;
-
-    public IOClass(String filePath, int lvlCompression) {
-        this.filePath = filePath;
-        this.lvlCompression = lvlCompression;
-    }
-
-    public void writeObject(Serializable object) {
+    public void writeObject(Serializable object, String filePath) {
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
             oos.writeObject(object);
         } catch (IOException e) {
@@ -23,7 +15,7 @@ public class IOClass {
         }
     }
 
-    public Object readObject() {
+    public Object readObject(String filePath) {
         try(ObjectInputStream ois = new ObjectInputStream(
                 new FileInputStream(filePath))) {
              return ois.readObject();
